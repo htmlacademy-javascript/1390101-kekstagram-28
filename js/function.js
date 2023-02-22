@@ -35,3 +35,19 @@ const getNumber = (string) => {
 };
 
 getNumber('2023 год');
+
+// Функция, которая принимает три параметра: исходную строку, минимальную длину и строку
+// с добавочными символами — и возвращает исходную строку,
+// дополненную указанными символами до заданной длины.
+
+const getPadStart = (string, minLength, pad) => {
+  let result = string;
+  while (result.length < minLength) {
+    const newResultLength = result.length + pad.length;
+    const actualPad = newResultLength <= minLength ? pad : pad.slice(0, minLength - newResultLength);
+    result = actualPad + result;
+  }
+  return result;
+};
+
+getPadStart('1', 2, '0');
