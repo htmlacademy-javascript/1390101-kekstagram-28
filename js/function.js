@@ -1,11 +1,8 @@
 // Функция для проверки длины строки
 
-const searchStringValidation = (test, number) => {
-  const lenght = test.length >= number;
-  return lenght;
-};
+const checkStringLength = (string, maxLength) => string.length >= maxLength;
 
-searchStringValidation('кот', 3);
+checkStringLength('кот', 3);
 
 // Функция для проверки, является ли строка палиндромом.
 
@@ -15,6 +12,7 @@ const checkPalindrom = (string) => {
   for (let i = string.length; i >= 0; i--) {
     newString += string[i];
   }
+
   return newString === string;
 };
 
@@ -24,14 +22,20 @@ checkPalindrom('Нос');
 //  и возвращает их в виде целого положительного числа.
 
 const getNumber = (string) => {
-  let number = '';
+  if (typeof string === 'number') {
+    return string;
+  }
+
+  let result = '';
+
   for (let i = 0; i < string.length; i++) {
     const currentSymbol = parseInt(string[i], 10);
     if (!isNaN(currentSymbol)) {
-      number += currentSymbol;
+      result += currentSymbol;
     }
   }
-  return parseInt(number, 10);
+
+  return parseInt(result, 10);
 };
 
 getNumber('2023 год');
@@ -47,6 +51,7 @@ const getPadStart = (string, minLength, pad) => {
     const actualPad = newResultLength <= minLength ? pad : pad.slice(0, minLength - newResultLength);
     result = actualPad + result;
   }
+
   return result;
 };
 
