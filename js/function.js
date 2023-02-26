@@ -22,16 +22,12 @@ checkPalindrom('Нос');
 //  и возвращает их в виде целого положительного числа.
 
 const getNumber = (string) => {
-  if (typeof string === 'number') {
-    return string;
-  }
-
   let result = '';
 
   for (let i = 0; i < string.length; i++) {
     const currentSymbol = parseInt(string[i], 10);
     if (!isNaN(currentSymbol)) {
-      result += currentSymbol;
+      result += String(currentSymbol);
     }
   }
 
