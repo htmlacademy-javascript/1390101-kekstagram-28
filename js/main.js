@@ -1,30 +1,58 @@
-// Функция, которая принимает строку, извлекает содержащиеся в ней цифры от 0 до 9
-//  и возвращает их в виде целого положительного числа.
+const PHOTO_OBJECT = 25;
+const AVATAR_NUMBER = 6;
+const LIKE_MIN = 15;
+const LIKE_MAX = 200;
+const COMMENT_PHOTO = 15;
+const NAMES = ['Саша', 'Петя', 'Вася', 'Мальвина', 'Маша', 'Круэлла', 'Урсула', 'Квазимода'];
 
-const getNumber = (string) => {
-  let result = '';
+const MASSAGE_COMMENT = [
+  'Всё отлично!',
+  'В целом всё неплохо. Но не всё.',
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
+];
 
-  for (let i = 0; i < string.length; i++) {
-    const currentSymbol = parseInt(string[i], 10);
-    if (!isNaN(currentSymbol)) {
-      result += String(currentSymbol);
-    }
-  }
-
-  return parseInt(result, 10);
-};
-
-getNumber('2023 год');
-
-const ID_PHOTO = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25];
-
-const DESCRIPTION_PHOTO =[
+const DESCRIPTIONS_PHOTO = [
   'Смотрите, как высоко!',
   'Без фильтров',
   'Тут все, Никита, Стас, Гена, Турбо и Дюша Метёлкин',
-  '',
-  '',
-  '',
-  '',
-  ''
-]
+  'Снято на айфон 4',
+  'Описание к фото',
+  'В Питере как всегда, солнечно весь день!',
+  'Всё путём, а у вас?'
+];
+
+// создает целое рандомное число
+const getRandomInteger = (a, b) => {
+  const lower = Math.ceil(Math.min(a, b));
+  const upper = Math.floor(Math.max(a, b));
+  const result = Math.random() * (upper - lower + 1) + lower;
+
+  return Math.floor(result);
+};
+
+// берет рандомный элемент из массива
+const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
+
+// генерирует ID
+function createIdGenerator () {
+  let lastGeneratedId = 0;
+
+  return function () {
+    lastGeneratedId += 1;
+    return lastGeneratedId;
+  };
+}
+
+const generatePhotoId = createIdGenerator();
+const generateCommentId = createIdGenerator();
+
+const сreatePhoto = () => {
+  return {
+    id: generatePhotoId(getRandomInteger(PHOTO_OBJECT)),
+    description: getRandomArrayElement(DESCRIPTIONS_PHOTO)
+  }
+}
+console.log(сreatePhoto());
