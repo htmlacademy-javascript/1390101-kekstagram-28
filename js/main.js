@@ -1,7 +1,7 @@
-const PHOTO_OBJECT = 25;
+const PHOTO_COUNT = 25;
 const NAMES = ['Саша', 'Петя', 'Вася', 'Мальвина', 'Маша', 'Круэлла', 'Урсула', 'Квазимода'];
 
-const MASSAGE_COMMENT = [
+const MESSAGE_COMMENT = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -33,7 +33,7 @@ const getRandomInteger = (a, b) => {
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
 // генерирует ID
-function createIdGenerator () {
+function createIdGenerator() {
   let lastGeneratedId = 0;
 
   return function () {
@@ -44,42 +44,44 @@ function createIdGenerator () {
 
 const generatePhotoId = createIdGenerator();
 
-const createComment = () => {
-  return {
+const createComment = () => ({
+  return: {
     id: getRandomInteger(1, 1000),
     avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
-    massage: getRandomArrayElement(MASSAGE_COMMENT),
+    massage: getRandomArrayElement(MESSAGE_COMMENT),
     name: getRandomArrayElement(NAMES)
   }
-};
+});
 
 const createComments = () => {
   const data = [];
-  const commentPhoto = getRandomInteger(2, 5);
+  const commentCount = getRandomInteger(2, 5);
 
-  for (let i = 0; i < commentPhoto; i++){
-    data.push(createComment(i));
+  for (let i = 0; i < commentCount; i++) {
+    data.push(createComment());
   }
 
   return data;
 };
 
-const createPhoto = () => {
-  return {
+const createPhoto = () => ({
+  return: {
     id: generatePhotoId(),
     url: `photos/${getRandomInteger(1, 25)}.jpg`,
     description: getRandomArrayElement(DESCRIPTIONS_PHOTO),
     likes: getRandomInteger(15, 200),
     comments: createComments()
   }
-};
+});
 
 const createPhotos = () => {
   const data = [];
 
-  for (let i = 0; i < PHOTO_OBJECT; i++){
+  for (let i = 0; i < PHOTO_COUNT; i++) {
     data.push(createPhoto());
   }
 
   return data;
 };
+
+createPhotos();
