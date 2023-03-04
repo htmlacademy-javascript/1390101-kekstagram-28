@@ -1,8 +1,4 @@
 const PHOTO_OBJECT = 25;
-const AVATAR_NUMBER = 6;
-const LIKE_MIN = 15;
-const LIKE_MAX = 200;
-const COMMENT_PHOTO = 15;
 const NAMES = ['Саша', 'Петя', 'Вася', 'Мальвина', 'Маша', 'Круэлла', 'Урсула', 'Квазимода'];
 
 const MASSAGE_COMMENT = [
@@ -47,12 +43,43 @@ function createIdGenerator () {
 }
 
 const generatePhotoId = createIdGenerator();
-const generateCommentId = createIdGenerator();
 
-const сreatePhoto = () => {
+const createComment = () => {
   return {
-    id: generatePhotoId(getRandomInteger(PHOTO_OBJECT)),
-    description: getRandomArrayElement(DESCRIPTIONS_PHOTO)
+    id: getRandomInteger(1, 1000),
+    avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
+    massage: getRandomArrayElement(MASSAGE_COMMENT),
+    name: getRandomArrayElement(NAMES)
   }
-}
-console.log(сreatePhoto());
+};
+
+const createComments = () => {
+  const data = [];
+  const commentPhoto = getRandomInteger(2, 5);
+
+  for (let i = 0; i < commentPhoto; i++){
+    data.push(createComment(i));
+  }
+
+  return data;
+};
+
+const createPhoto = () => {
+  return {
+    id: generatePhotoId(),
+    url: `photos/${getRandomInteger(1, 25)}.jpg`,
+    description: getRandomArrayElement(DESCRIPTIONS_PHOTO),
+    likes: getRandomInteger(15, 200),
+    comments: createComments()
+  }
+};
+
+const createPhotos = () => {
+  const data = [];
+
+  for (let i = 0; i < PHOTO_OBJECT; i++){
+    data.push(createPhoto());
+  }
+
+  return data;
+};
