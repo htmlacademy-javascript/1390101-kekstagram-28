@@ -1,17 +1,23 @@
-import { createPhotos } from "./data.js";
+import { createPhotos } from './data.js';
 
 const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
 const picturesSection = document.querySelector('.pictures');
-const pictureElement = pictureTemplate.cloneNode(true);
+const similarPictures = createPhotos();
 
-picturesSection.appendChild(pictureElement);
+const picturesSectionFragment = document.createDocumentFragment();
 
-similarPictures = createPhotos();
+similarPictures.forEach((photo) => {
+  const pictureElement = pictureTemplate.cloneNode(true);
+  pictureElement.querySelector('.picture__img').src = photo.url;
+  pictureElement.querySelector('.picture__likes').src = photo.likes;
+  pictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
 
-similarPictures.forEach(() => {
-
-
+  picturesSection.appendChild(pictureElement);
 });
+
+picturesSection.appendChild(picturesSectionFragment);
+
+export {similarPictures};
