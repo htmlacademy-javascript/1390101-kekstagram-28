@@ -35,12 +35,10 @@ function createIdGenerator() {
 const generatePhotoId = createIdGenerator();
 
 const createComment = () => ({
-  return: {
-    id: getRandomInteger(1, 1000),
-    avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
-    massage: getRandomArrayElement(MESSAGE_COMMENT),
-    name: getRandomArrayElement(NAMES)
-  }
+  id: getRandomInteger(1, 1000),
+  avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
+  massage: getRandomArrayElement(MESSAGE_COMMENT),
+  name: getRandomArrayElement(NAMES)
 });
 
 const createComments = () => {
@@ -55,13 +53,11 @@ const createComments = () => {
 };
 
 const createPhoto = () => ({
-  return: {
-    id: generatePhotoId(),
-    url: `photos/${getRandomInteger(1, 25)}.jpg`,
-    description: getRandomArrayElement(DESCRIPTIONS_PHOTO),
-    likes: getRandomInteger(15, 200),
-    comments: createComments()
-  }
+  id: generatePhotoId(),
+  url: `photos/${getRandomInteger(1, 25)}.jpg`,
+  description: getRandomArrayElement(DESCRIPTIONS_PHOTO),
+  likes: getRandomInteger(15, 200),
+  comments: createComments()
 });
 
 const createPhotos = () => {
