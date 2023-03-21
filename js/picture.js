@@ -1,8 +1,12 @@
+import { closeBigPicture, showBigPicture } from './big-picture.js';
+import { isEscapeKey } from './util.js';
+
 const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
 const picturesSection = document.querySelector('.pictures');
+const bigPictureCancel = document.querySelector('.big-picture__cancel');
 
 const picturesSectionFragment = document.createDocumentFragment();
 
@@ -14,10 +18,26 @@ const renderPictures = (photoCollection) => {
     pictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
 
     picturesSection.appendChild(pictureElement);
+
+    pictureElement.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      showBigPicture(photo);
+    });
   });
 
   picturesSection.appendChild(picturesSectionFragment);
 
 };
+
+bigPictureCancel.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  closeBigPicture();
+});
+
+document.addEventListener('keydown', (evt) => {
+  if (isEscapeKey(evt)) {
+    closeBigPicture();
+  }
+});
 
 export {renderPictures};
