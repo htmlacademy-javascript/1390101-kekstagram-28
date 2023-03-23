@@ -1,12 +1,10 @@
-import { closeBigPicture, showBigPicture } from './big-picture.js';
-import { isEscapeKey } from './util.js';
+import { showBigPicture } from './big-picture.js';
 
 const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
 const picturesSection = document.querySelector('.pictures');
-const bigPictureCancel = document.querySelector('.big-picture__cancel');
 
 const picturesSectionFragment = document.createDocumentFragment();
 
@@ -28,16 +26,5 @@ const renderPictures = (photoCollection) => {
   picturesSection.appendChild(picturesSectionFragment);
 
 };
-
-bigPictureCancel.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  closeBigPicture();
-});
-
-document.addEventListener('keydown', (evt) => {
-  if (isEscapeKey(evt)) {
-    closeBigPicture();
-  }
-});
 
 export {renderPictures};
