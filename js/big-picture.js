@@ -14,8 +14,20 @@ const commentsLoader = document.querySelector('.comments-loader');
 const closeBigPicture = () => {
   document.body.classList.remove('modal-open');
   bigPicture.classList.add('hidden');
-  document.body.removeEventListener('keydown', bigPictureCancel);
+
+  bigPictureCancel.removeEventListener('click', onCloseButtonClick);
+  document.removeEventListener('keydown', onDocumentKeydown);
 };
+
+function onCloseButtonClick() {
+  closeBigPicture();
+}
+
+function onDocumentKeydown(evt) {
+  if (isEscapeKey(evt)) {
+    closeBigPicture();
+  }
+}
 
 const renderComments = (comments) => {
   socialComments.innerHTML = '';
@@ -35,7 +47,7 @@ const renderComments = (comments) => {
 const renderBigPicture = (photo) => {
   bigPictureImg.src = photo.url;
   likesCount.textContent = photo.likes;
-  commentsCount.textContent = photo.comments.lenght;
+  commentsCount.textContent = photo.comments.length;
   socialCaption.textContent = photo.description;
   renderComments(photo.comments);
 };
@@ -47,28 +59,8 @@ const showBigPicture = (photo) => {
   socialCommentCount.classList.add('hidden');
   commentsLoader.classList.add('hidden');
 
-  bigPictureCancel.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    closeBigPicture();
-  });
-
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      closeBigPicture();
-    }
-  });
+  bigPictureCancel.addEventListener('click', onCloseButtonClick);
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
-
-// // Нужно:
-//   наполнять его данными:
-//   Адрес изображения url подставьте как src изображения внутри блока .big-picture__img.
-
-// Количество лайков likes подставьте как текстовое содержание элемента .likes-count.
-
-// Количество комментариев comments подставьте как текстовое содержание элемента .comments-count.
-
-// Список комментариев под фотографией: комментарии должны вставляться в блок .social__comments
-// });
-
-export {showBigPicture, closeBigPicture};
+export {showBigPicture};
