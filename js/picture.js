@@ -1,3 +1,5 @@
+import { showBigPicture } from './big-picture.js';
+
 const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
@@ -14,6 +16,11 @@ const renderPictures = (photoCollection) => {
     pictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
 
     picturesSection.appendChild(pictureElement);
+
+    pictureElement.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      showBigPicture(photo);
+    });
   });
 
   picturesSection.appendChild(picturesSectionFragment);
