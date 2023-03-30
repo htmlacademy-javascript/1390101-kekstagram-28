@@ -6,3 +6,5 @@ const photoCollection = createPhotos();
 
 renderPictures(photoCollection);
 initValidation();
+
+import './scale.js';
