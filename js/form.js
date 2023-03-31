@@ -1,3 +1,5 @@
+import { resetEffects } from './effects.js';
+import { downloadScale } from './scale.js';
 import { isEscapeKey } from './util.js';
 
 const TAG_ERROR_TEXT = 'Неправильно заполнены хештеги';
@@ -29,6 +31,8 @@ const onCloseModal = () => {
   document.addEventListener('keydown', onDocumentKeydown);
   form.reset();
   pristine.reset();
+  downloadScale();
+  resetEffects();
 };
 
 function onDocumentKeydown(evt) {
