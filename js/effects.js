@@ -1,6 +1,6 @@
 const EFFECTS = [
   {
-    name: 'original',
+    name: 'none',
     style: 'none',
     min: 0,
     max: 100,
@@ -32,7 +32,7 @@ const EFFECTS = [
     unit: '%'
   },
   {
-    name: 'fobos',
+    name: 'phobos',
     style: 'blur',
     min: 0,
     max: 3,
@@ -40,7 +40,7 @@ const EFFECTS = [
     unit: 'px'
   },
   {
-    name: 'znoi',
+    name: 'heat',
     style: 'brightness',
     min: 0,
     max: 3,
@@ -48,14 +48,14 @@ const EFFECTS = [
     unit: ''
   }
 ];
+const DEFAULT_EFFECT = EFFECTS[0];
 
-const imagePreview = document.querySelector('.img-upload__preview');
+const imagePreview = document.querySelector('.img-upload__preview img');
 const imageEffects = document.querySelector('.effects');
 const slider = document.querySelector('.effect-level__slider');
-const sliderContainer = document.querySelector('.img-upload__preview-container');
+const sliderContainer = document.querySelector('.img-upload__overlay');
 const effectLevelValue = document.querySelector('.effect-level__value');
 
-const DEFAULT_EFFECT = EFFECTS[0];
 let chosenEffect = DEFAULT_EFFECT;
 const isDefault = () => chosenEffect === DEFAULT_EFFECT;
 
@@ -76,8 +76,6 @@ noUiSlider.create(slider, {
   step: DEFAULT_EFFECT.step,
   connect: 'lower'
 });
-
-hideSlider();
 
 const updateSlider = () => {
   slider.noUiSlider.updateOptions({
@@ -100,7 +98,7 @@ const onEffectsChange = (evt) => {
   if (!evt.target.classList.contains('effects__radio')) {
     return;
   }
-  chosenEffect = EFFECTS.find((effect) => effect.name === evt.target);
+  chosenEffect = EFFECTS.find((effect) => effect.name === evt.target.value);
   imagePreview.className = `effects__preview--${chosenEffect.name}`;
   updateSlider();
 };

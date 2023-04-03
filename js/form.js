@@ -33,6 +33,7 @@ const onCloseModal = () => {
   pristine.reset();
   downloadScale();
   resetEffects();
+  downloadScale();
 };
 
 function onDocumentKeydown(evt) {
