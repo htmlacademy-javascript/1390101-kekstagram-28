@@ -31,10 +31,12 @@ const onBiggerScaleClick = () => {
   scaleImage(newValue);
 };
 
-const downloadScale = () => {
+const resetScale = () => scaleImage(DEFAULT_SCALE);
+
+const initScale = () => {
   scaleImage(DEFAULT_SCALE);
   controlSmallerScale.addEventListener('click', onSmallerScaleClick);
   controlBiggerScale.addEventListener('click', onBiggerScaleClick);
 };
 
-export { downloadScale };
+export { initScale, resetScale };

@@ -1,5 +1,5 @@
 import { resetEffects } from './effects.js';
-import { downloadScale } from './scale.js';
+import { resetScale } from './scale.js';
 import { isEscapeKey } from './util.js';
 
 const TAG_ERROR_TEXT = 'Неправильно заполнены хештеги';
@@ -19,29 +19,31 @@ const pristine = new Pristine(form, {
   errorTextClass: 'img-upload__field-wrapper__error'
 });
 
-const onShowModal = () => {
+const showModal = () => {
   modalOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
-const onCloseModal = () => {
+const closeModal = () => {
   modalOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
   form.reset();
   pristine.reset();
-  downloadScale();
+  resetScale();
   resetEffects();
-  downloadScale();
 };
 
 function onDocumentKeydown(evt) {
   if(isEscapeKey(evt)) {
     evt.preventDefault();
-    onCloseModal();
+    closeModal();
   }
 }
+
+const onUploadFileChange = () => showModal();
+const onCancelButtonClick = () => closeModal();
 
 const onFormSubmit = (evt) => {
   evt.preventDefault();
@@ -69,15 +71,15 @@ const validateTags = (value) => {
   return hashValidCount(tags) && hashUniqueTags(tags) && tags.every(isValidTeg);
 };
 
-const initValidation = () => {
+const setupPictureForm = () => {
   pristine.addValidator(
     textHashtags,
     validateTags,
     TAG_ERROR_TEXT
   );
 
-  uploadFile.addEventListener('change', onShowModal);
-  cancelButton.addEventListener('click', onCloseModal);
+  uploadFile.addEventListener('change', onUploadFileChange);
+  cancelButton.addEventListener('click', onCancelButtonClick);
   form.addEventListener('submit', onFormSubmit);
   commentField.addEventListener('focus', removeDocumentListener);
   commentField.addEventListener('blur', addDocumentListener);
@@ -85,4 +87,4 @@ const initValidation = () => {
   textHashtags.addEventListener('blur', addDocumentListener);
 };
 
-export { initValidation };
+export { setupPictureForm };
