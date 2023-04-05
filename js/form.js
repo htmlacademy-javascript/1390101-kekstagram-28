@@ -12,6 +12,8 @@ const uploadFile = document.querySelector ('.img-upload__input');
 const cancelButton = document.querySelector('.img-upload__cancel');
 const commentField = form.querySelector('.text__description');
 const textHashtags = form.querySelector('.text__hashtags');
+const uploadSubmit = document.querySelector('.img-upload__submit');
+const textDescription = form.querySelector('.text__description');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -87,4 +89,26 @@ const setupPictureForm = () => {
   textHashtags.addEventListener('blur', addDocumentListener);
 };
 
-export { setupPictureForm };
+const blockSubmitButton = () => {
+  uploadSubmit.disabled = true;
+  textDescription.readOnly = true;
+};
+
+const unblockSubmitButton = () => {
+  uploadSubmit.disabled = false;
+  textDescription.readOnly = false;
+};
+
+const setOnFormSubmit = (cb) => {
+  form.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      await cb(new FormData(form));
+      unblockSubmitButton();
+    }
+  });
+};
+
+export { setupPictureForm, setOnFormSubmit, onDocumentKeydown };
