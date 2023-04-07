@@ -1,6 +1,8 @@
+import { sendData } from './api.js';
 import { resetEffects } from './effects.js';
 import { resetScale } from './scale.js';
 import { isEscapeKey } from './util.js';
+import { showSuccessMessage, showErrorMessage } from './message.js';
 
 const TAG_ERROR_TEXT = 'Неправильно заполнены хештеги';
 const MAX_TAGS_COUNT = 5;
@@ -47,11 +49,6 @@ function onDocumentKeydown(evt) {
 const onUploadFileChange = () => showModal();
 const onCancelButtonClick = () => closeModal();
 
-const onFormSubmit = (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-};
-
 const removeDocumentListener = () => document.removeEventListener('keydown', onDocumentKeydown);
 const addDocumentListener = () => document.addEventListener('keydown', onDocumentKeydown);
 
@@ -73,22 +70,6 @@ const validateTags = (value) => {
   return hashValidCount(tags) && hashUniqueTags(tags) && tags.every(isValidTeg);
 };
 
-const setupPictureForm = () => {
-  pristine.addValidator(
-    textHashtags,
-    validateTags,
-    TAG_ERROR_TEXT
-  );
-
-  uploadFile.addEventListener('change', onUploadFileChange);
-  cancelButton.addEventListener('click', onCancelButtonClick);
-  form.addEventListener('submit', onFormSubmit);
-  commentField.addEventListener('focus', removeDocumentListener);
-  commentField.addEventListener('blur', addDocumentListener);
-  textHashtags.addEventListener('focus', removeDocumentListener);
-  textHashtags.addEventListener('blur', addDocumentListener);
-};
-
 const blockSubmitButton = () => {
   uploadSubmit.disabled = true;
   textDescription.readOnly = true;
@@ -99,16 +80,38 @@ const unblockSubmitButton = () => {
   textDescription.readOnly = false;
 };
 
-const setOnFormSubmit = (cb) => {
-  form.addEventListener('submit', async (evt) => {
-    evt.preventDefault();
-    const isValid = pristine.validate();
-    if (isValid) {
-      blockSubmitButton();
-      await cb(new FormData(form));
+const onFormSubmit = async (evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
+
+  if (isValid) {
+    blockSubmitButton();
+    try {
+      await sendData(new FormData(form));
+      closeModal();
+      showSuccessMessage();
+    } catch {
+      showErrorMessage();
+    } finally {
       unblockSubmitButton();
     }
-  });
+  }
 };
 
-export { setupPictureForm, setOnFormSubmit, onDocumentKeydown };
+const setupPictureForm = () => {
+  pristine.addValidator(
+    textHashtags,
+    validateTags,
+    TAG_ERROR_TEXT
+  );
+
+  uploadFile.addEventListener('change', onUploadFileChange);
+  cancelButton.addEventListener('click', onCancelButtonClick);
+  commentField.addEventListener('focus', removeDocumentListener);
+  commentField.addEventListener('blur', addDocumentListener);
+  textHashtags.addEventListener('focus', removeDocumentListener);
+  textHashtags.addEventListener('blur', addDocumentListener);
+  form.addEventListener('submit', onFormSubmit);
+};
+
+export { setupPictureForm, onDocumentKeydown };
