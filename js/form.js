@@ -1,6 +1,8 @@
+import { sendData } from './api.js';
 import { resetEffects } from './effects.js';
 import { resetScale } from './scale.js';
 import { isEscapeKey } from './util.js';
+import { showSuccessMessage, showErrorMessage } from './message.js';
 
 const TAG_ERROR_TEXT = 'Неправильно заполнены хештеги';
 const MAX_TAGS_COUNT = 5;
@@ -12,6 +14,8 @@ const uploadFile = document.querySelector ('.img-upload__input');
 const cancelButton = document.querySelector('.img-upload__cancel');
 const commentField = form.querySelector('.text__description');
 const textHashtags = form.querySelector('.text__hashtags');
+const uploadSubmit = document.querySelector('.img-upload__submit');
+const textDescription = form.querySelector('.text__description');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -45,11 +49,6 @@ function onDocumentKeydown(evt) {
 const onUploadFileChange = () => showModal();
 const onCancelButtonClick = () => closeModal();
 
-const onFormSubmit = (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-};
-
 const removeDocumentListener = () => document.removeEventListener('keydown', onDocumentKeydown);
 const addDocumentListener = () => document.addEventListener('keydown', onDocumentKeydown);
 
@@ -71,6 +70,34 @@ const validateTags = (value) => {
   return hashValidCount(tags) && hashUniqueTags(tags) && tags.every(isValidTeg);
 };
 
+const blockSubmitButton = () => {
+  uploadSubmit.disabled = true;
+  textDescription.readOnly = true;
+};
+
+const unblockSubmitButton = () => {
+  uploadSubmit.disabled = false;
+  textDescription.readOnly = false;
+};
+
+const onFormSubmit = async (evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
+
+  if (isValid) {
+    blockSubmitButton();
+    try {
+      await sendData(new FormData(form));
+      closeModal();
+      showSuccessMessage();
+    } catch {
+      showErrorMessage();
+    } finally {
+      unblockSubmitButton();
+    }
+  }
+};
+
 const setupPictureForm = () => {
   pristine.addValidator(
     textHashtags,
@@ -80,11 +107,11 @@ const setupPictureForm = () => {
 
   uploadFile.addEventListener('change', onUploadFileChange);
   cancelButton.addEventListener('click', onCancelButtonClick);
-  form.addEventListener('submit', onFormSubmit);
   commentField.addEventListener('focus', removeDocumentListener);
   commentField.addEventListener('blur', addDocumentListener);
   textHashtags.addEventListener('focus', removeDocumentListener);
   textHashtags.addEventListener('blur', addDocumentListener);
+  form.addEventListener('submit', onFormSubmit);
 };
 
-export { setupPictureForm };
+export { setupPictureForm, onDocumentKeydown };
