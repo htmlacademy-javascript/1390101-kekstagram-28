@@ -3,16 +3,17 @@ import { isEscapeKey } from './util.js';
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 
-const getMessageType = () => document.querySelector('.error, .success');
+const getMessage = () => document.querySelector('.error, .success');
 
 const closeMessage = () => {
-  const message = getMessageType();
+  const message = getMessage();
   if (message) {
     message.remove();
   }
 
   document.removeEventListener('click', onOutsideClick);
   document.removeEventListener('keydown', onMessageKeydown);
+  document.body.classList.remove('has-message');
 };
 
 const showErrorMessage = () => {
@@ -23,6 +24,7 @@ const showErrorMessage = () => {
 
   document.addEventListener('click', onOutsideClick);
   document.addEventListener('keydown', onMessageKeydown);
+  document.body.classList.add('has-message');
 };
 
 const showSuccessMessage = () => {
@@ -33,18 +35,19 @@ const showSuccessMessage = () => {
 
   document.addEventListener('click', onOutsideClick);
   document.addEventListener('keydown', onMessageKeydown);
+  document.body.classList.add('has-message');
 };
 
 function onMessageKeydown (evt) {
-  if (isEscapeKey(evt) && getMessageType()) {
+  if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeMessage();
   }
 }
 
 function onOutsideClick (evt) {
-  const type = getMessageType();
-  if (evt.target === type) {
+  const message = getMessage();
+  if (evt.target === message) {
     closeMessage();
   }
 }
