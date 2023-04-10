@@ -32,7 +32,7 @@ const showModal = () => {
 const closeModal = () => {
   modalOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  document.addEventListener('keydown', onDocumentKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
   form.reset();
   pristine.reset();
   resetScale();
@@ -40,7 +40,7 @@ const closeModal = () => {
 };
 
 function onDocumentKeydown(evt) {
-  if(isEscapeKey(evt)) {
+  if(isEscapeKey(evt) && !document.body.classList.contains('has-message')) {
     evt.preventDefault();
     closeModal();
   }
