@@ -3,8 +3,8 @@ import { setupPictureForm } from './form.js';
 import { initScale } from './scale.js';
 import { initPictureEffects } from './effects.js';
 import { getData } from './api.js';
-import { debounce, showAlert } from './util.js';
-import { init, getSortedPictures } from './sorting.js';
+import { showAlert } from './util.js';
+import { initFilters } from './filters.js';
 
 setupPictureForm();
 initScale();
@@ -12,9 +12,8 @@ initPictureEffects();
 
 try {
   const data = await getData();
-  const debouncedRenderPictures = debounce(renderPictures);
-  init(data, debouncedRenderPictures);
-  renderPictures(getSortedPictures());
+  initFilters(data);
+  renderPictures(data);
 } catch (err) {
   showAlert(err.message);
 }

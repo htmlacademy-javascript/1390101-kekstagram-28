@@ -1,25 +1,33 @@
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
-const fileChooser = document.querySelector('#upload-file');
-const previewElement = document.querySelector('.img-upload__preview img');
+const Picture = {
+  WIDTH: 600,
+  HEIGHT: 600,
+};
 
-const effectsPreviewBg = document.querySelectorAll('.effects__preview');
+const uploadFile = document.querySelector('#upload-file');
+const uploadPreview = document.querySelector('.img-upload__preview img');
+const previews = document.querySelectorAll('.effects__preview');
 
-function selectedFile() {
-  const file = fileChooser.files[0];
+uploadFile.addEventListener('change', () => {
+  const file = uploadFile.files[0];
   const fileName = file.name.toLowerCase();
 
-  const matches = FILE_TYPES.some((el) => fileName.endsWith(el));
+  const matches = FILE_TYPES.some((element) => fileName.endsWith(element));
 
   if (matches) {
-    previewElement.src = URL.createObjectURL(file);
+    const reader = new FileReader();
 
-    for (const el of effectsPreviewBg) {
-      el.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
-    }
+    reader.addEventListener('load', () => {
+      uploadPreview.src = reader.result;
+      uploadPreview.width = Picture['WIDTH'];
+      uploadPreview.height = Picture['HEIGHT'];
+
+      previews.forEach((filter) => {
+        filter.style.backgroundImage = `url(${reader.result})`;
+      });
+    });
+
+    reader.readAsDataURL(file);
   }
-}
-
-fileChooser.addEventListener('change', selectedFile);
-
-export const showSelectedFile = () => fileChooser.addEventListener('change', selectedFile);
+});
