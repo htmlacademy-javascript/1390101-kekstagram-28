@@ -3,6 +3,7 @@ import { resetEffects } from './effects.js';
 import { resetScale } from './scale.js';
 import { isEscapeKey } from './util.js';
 import { showSuccessMessage, showErrorMessage } from './message.js';
+import { uploadFile } from './load-pictures.js';
 
 const TAG_ERROR_TEXT = 'Неправильно заполнены хештеги';
 const MAX_TAGS_COUNT = 5;
@@ -10,7 +11,7 @@ const TAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i;
 
 const form = document.querySelector('.img-upload__form');
 const modalOverlay = document.querySelector('.img-upload__overlay');
-const uploadFile = document.querySelector ('.img-upload__input');
+const uploadFileInput = document.querySelector ('.img-upload__input');
 const cancelButton = document.querySelector('.img-upload__cancel');
 const commentField = form.querySelector('.text__description');
 const textHashtags = form.querySelector('.text__hashtags');
@@ -27,6 +28,7 @@ const showModal = () => {
   modalOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
+  uploadFile();
 };
 
 const closeModal = () => {
@@ -105,7 +107,7 @@ const setupPictureForm = () => {
     TAG_ERROR_TEXT
   );
 
-  uploadFile.addEventListener('change', onUploadFileChange);
+  uploadFileInput.addEventListener('change', onUploadFileChange);
   cancelButton.addEventListener('click', onCancelButtonClick);
   commentField.addEventListener('focus', removeDocumentListener);
   commentField.addEventListener('blur', addDocumentListener);
