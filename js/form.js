@@ -3,7 +3,6 @@ import { resetEffects } from './effects.js';
 import { resetScale } from './scale.js';
 import { isEscapeKey } from './util.js';
 import { showSuccessMessage, showErrorMessage } from './message.js';
-import { uploadFile } from './load-pictures.js';
 
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const TAG_ERROR_TEXT = 'Неправильно заполнены хештеги';
@@ -31,7 +30,6 @@ const showModal = () => {
   modalOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
-  uploadFile();
 };
 
 const closeModal = () => {
