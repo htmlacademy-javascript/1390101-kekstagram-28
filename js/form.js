@@ -5,6 +5,7 @@ import { isEscapeKey } from './util.js';
 import { showSuccessMessage, showErrorMessage } from './message.js';
 import { uploadFile } from './load-pictures.js';
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const TAG_ERROR_TEXT = 'Неправильно заполнены хештеги';
 const MAX_TAGS_COUNT = 5;
 const TAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -17,6 +18,8 @@ const commentField = form.querySelector('.text__description');
 const textHashtags = form.querySelector('.text__hashtags');
 const uploadSubmit = document.querySelector('.img-upload__submit');
 const textDescription = form.querySelector('.text__description');
+const previews = document.querySelectorAll('.effects__preview');
+const uploadPreview = document.querySelector('.img-upload__preview img');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -48,7 +51,28 @@ function onDocumentKeydown(evt) {
   }
 }
 
-const onUploadFileChange = () => showModal();
+const onUploadFileChange = () => {
+  const file = uploadFileInput.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((element) => fileName.endsWith(element));
+
+  if (matches) {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+      uploadPreview.src = reader.result;
+
+      previews.forEach((filter) => {
+        filter.style.backgroundImage = `url(${reader.result})`;
+      });
+    });
+
+    reader.readAsDataURL(file);
+    showModal();
+  }
+};
+
 const onCancelButtonClick = () => closeModal();
 
 const removeDocumentListener = () => document.removeEventListener('keydown', onDocumentKeydown);
