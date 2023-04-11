@@ -4,18 +4,21 @@ import { resetScale } from './scale.js';
 import { isEscapeKey } from './util.js';
 import { showSuccessMessage, showErrorMessage } from './message.js';
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const TAG_ERROR_TEXT = 'Неправильно заполнены хештеги';
 const MAX_TAGS_COUNT = 5;
 const TAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i;
 
 const form = document.querySelector('.img-upload__form');
 const modalOverlay = document.querySelector('.img-upload__overlay');
-const uploadFile = document.querySelector ('.img-upload__input');
+const uploadFileInput = document.querySelector ('.img-upload__input');
 const cancelButton = document.querySelector('.img-upload__cancel');
 const commentField = form.querySelector('.text__description');
 const textHashtags = form.querySelector('.text__hashtags');
 const uploadSubmit = document.querySelector('.img-upload__submit');
 const textDescription = form.querySelector('.text__description');
+const previews = document.querySelectorAll('.effects__preview');
+const uploadPreview = document.querySelector('.img-upload__preview img');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -46,7 +49,28 @@ function onDocumentKeydown(evt) {
   }
 }
 
-const onUploadFileChange = () => showModal();
+const onUploadFileChange = () => {
+  const file = uploadFileInput.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((element) => fileName.endsWith(element));
+
+  if (matches) {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+      uploadPreview.src = reader.result;
+
+      previews.forEach((filter) => {
+        filter.style.backgroundImage = `url(${reader.result})`;
+      });
+    });
+
+    reader.readAsDataURL(file);
+    showModal();
+  }
+};
+
 const onCancelButtonClick = () => closeModal();
 
 const removeDocumentListener = () => document.removeEventListener('keydown', onDocumentKeydown);
@@ -105,7 +129,7 @@ const setupPictureForm = () => {
     TAG_ERROR_TEXT
   );
 
-  uploadFile.addEventListener('change', onUploadFileChange);
+  uploadFileInput.addEventListener('change', onUploadFileChange);
   cancelButton.addEventListener('click', onCancelButtonClick);
   commentField.addEventListener('focus', removeDocumentListener);
   commentField.addEventListener('blur', addDocumentListener);

@@ -38,7 +38,7 @@ const renderComments = (comments) => {
     const newComment = commentCopy.querySelector('.social__text');
     newPhoto.src = comment.avatar;
     newPhoto.alt = comment.name;
-    newComment.textContent = comment.massage;
+    newComment.textContent = comment.message;
 
     socialComments.appendChild(commentCopy);
   });
@@ -63,4 +63,4 @@ const showBigPicture = (photo) => {
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
-export {showBigPicture};
+export { showBigPicture };
